@@ -72,12 +72,14 @@
             <groupId>com.jcraft</groupId>
             <artifactId>jsch</artifactId>
             <version>0.1.54</version>
+            <scope>provided</scope>
         </dependency>
         <!-- 远程执行win命令 -->
         <dependency>
             <groupId>io.cloudsoft.windows</groupId>
             <artifactId>winrm4j</artifactId>
             <version>0.5.0</version>
+            <scope>provided</scope>
         </dependency>
         <!--mybatis plus-->
         <dependency>
