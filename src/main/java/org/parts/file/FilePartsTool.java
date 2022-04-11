@@ -28,7 +28,7 @@ public class FilePartsTool {
      *
      * @param path
      */
-    public void delPath(String path) {
+    public static void delPath(String path) {
         if (path != null) {
             if (os_name.toLowerCase().contains("windows")) {
                 File file = new File(path);
