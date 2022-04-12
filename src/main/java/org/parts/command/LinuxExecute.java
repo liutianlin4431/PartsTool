@@ -6,7 +6,8 @@ import org.parts.file.FilePartsTool;
 import java.io.*;
 
 /**
- * 远程linux工具类
+ * 远程linux工具类<br>
+ * <b style="color: red;" >ssh免密命令请使用本地执行方法</b>
  *
  * @author ltl
  */
@@ -33,14 +34,14 @@ public class LinuxExecute {
     }
 
     /**
-     * 跨服务器执行linux命令； 使用jsch时密码不能为空； 当不使用jsch时，命令自动添加ssh命令，不可传入开头为ssh的命令语句；
+     * 跨服务器执行linux命令
      *
-     * @param host    ip地址
+     * @param host    服务器地址
      * @param user    用户
      * @param pwd     密码
      * @param port    端口
-     * @param command 语句
-     * @return -1:则为try{}catch{}异常；
+     * @param command 命令
+     * @return
      */
     public Integer sshExecute(String host, String user, String pwd, Integer port, String command) {
         StringBuffer sb = new StringBuffer();
@@ -71,14 +72,15 @@ public class LinuxExecute {
     }
 
     /**
-     * 文件上传;使用jsch时密码不能为空； 当不使用jsch时，命令自动添加ssh命令，不可传入开头为ssh的命令语句；
+     * 跨服务器上传文件
      *
-     * @param host       ip地址
+     * @param host       服务器地址
      * @param user       用户
      * @param pwd        密码
      * @param port       端口
-     * @param directory  上传目录
-     * @param uploadFile 要上传的文件路径
+     * @param directory  远程存放文件目录
+     * @param uploadFile 上传文件
+     * @return
      */
 
     public boolean sshUpload(String host, String user, String pwd, Integer port, String directory, String uploadFile) {
@@ -111,6 +113,8 @@ public class LinuxExecute {
     }
 
     /**
+     * 远程拉取文件
+     *
      * @param host       ip地址
      * @param user       用户
      * @param pwd        密码
@@ -158,7 +162,7 @@ public class LinuxExecute {
      * @param port 端口
      * @return
      */
-    public Session getSession(String host, String user, String pwd, Integer port) throws Exception {
+    private Session getSession(String host, String user, String pwd, Integer port) throws Exception {
         JSch jsch = new JSch();
         jsch.getSession(user, host, port);
         Session session = jsch.getSession(user, host, port);
