@@ -32,7 +32,8 @@ public class CommonResult<T> {
     }
 
     /**
-     * 成功并输出【数据】信息
+     * 成功并输出【数据】信息 <br>
+     * 与result方法功能相同
      *
      * @param result 结果
      * @param <T>    返回值类型
