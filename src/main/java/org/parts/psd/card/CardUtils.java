@@ -122,4 +122,27 @@ public class CardUtils {
         }
     }
 
+    /**
+     * 根据字节范围获取一行中指定数据 <br/>
+     * 坐标与潮流文档一致,非下标值
+     *
+     * @param line
+     * @param start 起始坐标（数据包含当前自身）
+     * @param end   解释坐标（数据包含当前自身）
+     * @return
+     */
+    public static String getDataAccordingToBytes(String line, Integer start, Integer end) {
+        try {
+            start--;
+            byte[] all = line.getBytes("GBK");
+            if (all.length < end) {
+                end = all.length;
+            }
+            byte[] local = new byte[end - start];
+            System.arraycopy(all, start, local, 0, end - start);
+            return new String(local, "GBK");
+        } catch (Exception e) {
+            return "";
+        }
+    }
 }
