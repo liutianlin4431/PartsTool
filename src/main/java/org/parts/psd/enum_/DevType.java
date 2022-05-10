@@ -48,6 +48,22 @@ public enum DevType {
      */
     SWITCH(20),
     /**
+     * 并联电容
+     */
+    CAPACITOR_P(21),
+    /**
+     * 并联电抗
+     */
+    REACTOR_P(22),
+    /**
+     * 串联电容
+     */
+    CAPACITOR_S(23),
+    /**
+     * 串联电抗
+     */
+    REACTOR_S(24),
+    /**
      * 接地刀闸
      */
     GROUNDSWITCH(28),
