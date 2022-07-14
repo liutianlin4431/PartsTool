@@ -106,7 +106,7 @@ public class QueryWrapperLa<T> extends QueryWrapper<T> {
      * @param attribute 变量相对于当前类是否真实存在
      * @return
      */
-    private String gf(FFunction<T, ?> efun, boolean attribute) {
+    protected String gf(FFunction<T, ?> efun, boolean attribute) {
         String clazzName = efun.getClass().getCanonicalName();
         SerializedLambda serializedLambda = Optional.ofNullable(EFUN_CACHE.get(clazzName)).orElseGet(() -> {
             // 从function取出序列化方法
