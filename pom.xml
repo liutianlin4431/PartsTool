@@ -59,6 +59,12 @@
 
     </build>
     <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.1</version>
+            <scope>test</scope>
+        </dependency>
         <!-- lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -97,6 +103,13 @@
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-core</artifactId>
             <version>3.3.2</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- 糊涂工具包 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.3.8</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
