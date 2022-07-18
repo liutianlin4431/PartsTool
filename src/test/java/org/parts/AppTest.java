@@ -10,7 +10,7 @@ public class AppTest {
     public void test01() {
         JointWrapper<ReturnData> jw = new JointWrapper<>();
         jw.eq(ReturnData::getData, 1);
-        jw.oneGroupOr(1, ReturnData::getCode, ReturnData::getSuccess);
+        jw.oneGroupOr(1, ReturnData::getCode, ReturnData::getSuccess).or().eq(ReturnData::getData, 2);
         Console.log(jw.getWhereSql());
     }
 }

@@ -6,6 +6,7 @@ import org.parts.mp.wrapper.auxiliary.AuxiliaryWrapper;
 import org.parts.mp.wrapper.auxiliary.FFunction;
 
 public class JointWrapper<T> implements AuxiliaryWrapper<T> {
+    private boolean or = false;
     private StringBuffer sb = new StringBuffer();
     private JSONObject json = new JSONObject();
 
@@ -20,9 +21,23 @@ public class JointWrapper<T> implements AuxiliaryWrapper<T> {
         if (sql.startsWith("and")) {
             sql = sql.substring(3);
         }
+        //将sql尾部的" or "去掉
+        if (sql.endsWith(" or ")) {
+            sql = sql.substring(0, sql.length() - 4);
+        }
         return "where" + sql;
     }
 
+    /**
+     * 拼接or
+     *
+     * @return
+     */
+    public JointWrapper<T> or() {
+        sb.append(" or ");
+        or = true;
+        return this;
+    }
 
     /**
      * 一组或，and（? = ? or ? = ? or ...）
@@ -149,7 +164,12 @@ public class JointWrapper<T> implements AuxiliaryWrapper<T> {
      * @param value
      */
     private void append(String column, String operator, String value) {
-        sb.append("and " + column + " " + operator + " " + value + " ");
+        if (or) {
+            sb.append(column + " " + operator + " " + value + " ");
+            or = false;
+        } else {
+            sb.append("and " + column + " " + operator + " " + value + " ");
+        }
         json.set(column, value);
     }
 
