@@ -96,7 +96,9 @@ public class CommonResult<T> {
      * @param <T>    返回值类型
      * @param result 结果
      * @return CommonResult<T>
+     * @deprecated 推荐使用 "OK(T result)"
      */
+    @Deprecated
     public static <T> CommonResult<T> result(T result) {
         CommonResult<T> cr = new CommonResult<T>();
         cr.setSuccess(true);
@@ -217,6 +219,7 @@ public class CommonResult<T> {
         CommonResult<T> cr = new CommonResult<T>();
         cr.setSuccess(false);
         cr.setErrorMsg(e);
+        cr.setMsg(e.getMessage());
         cr.setStamp(System.currentTimeMillis());
         return cr;
     }
