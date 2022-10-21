@@ -80,7 +80,7 @@ public class LocalExecute {
             if (timeout == null || timeout < 1) {
                 pos.destroyForcibly();
                 future.cancel(true);//结束异步监听
-                return 0;
+                return 1;
             }
             for (int i = 0; i > -1; i++) {
                 TimeUnit.SECONDS.sleep(1);
@@ -90,10 +90,10 @@ public class LocalExecute {
                 if (i >= timeout) {
                     pos.destroyForcibly();
                     future.cancel(true);//结束异步监听
-                    return 0;
+                    return 1;
                 }
             }
-            return 1;
+            return 0;
         } catch (Exception e) {
             return 1;
         } finally {
