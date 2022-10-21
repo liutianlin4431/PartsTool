@@ -1,11 +1,9 @@
 package org.parts.command;
 
+import org.parts.command.utils.ScriptOutput;
 import org.parts.file.FilePartsTool;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * 本地命令执行工具类
@@ -14,6 +12,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class LocalExecute {
     private static LocalExecute le = null;
+    private static ExecutorService executorSer = null;
 
     /**
      * 创建类（单例）
@@ -42,16 +41,16 @@ public class LocalExecute {
      */
     public Integer runCommand(String command) {
         try {
-            command = FilePartsTool.StandardPath(command);// 统一执行命令斜杠方向
+            // 统一执行命令斜杠方向
+            command = FilePartsTool.StandardPath(command);
             Process pos = Runtime.getRuntime().exec(command);
             // input信息需要在error之前执行，否input信息会阻塞-如果一步执行不存在此问题
-            printLog(pos.getInputStream());
-            printLog(pos.getErrorStream());
+            ScriptOutput.start(pos.getInputStream());
+            ScriptOutput.start(pos.getErrorStream());
             return pos.waitFor();
         } catch (Exception e) {
             e.printStackTrace();
             return 1;
-        } finally {
         }
     }
 
@@ -63,55 +62,44 @@ public class LocalExecute {
      * @return
      */
     public Integer runCommand(String cmd, Long timeout) {
+        ExecutorService executorService = null;
         try {
             // 开始执行cmd命令
             Process pos = Runtime.getRuntime().exec(cmd);
-            // input信息需要在error之前执行，否input信息会阻塞-如果异步执行不存在此问题
-            printLog(pos.getInputStream());
-            printLog(pos.getErrorStream());
-            if (pos.waitFor(timeout, TimeUnit.SECONDS)) {
+            // 开启异步任务
+            executorService = Executors.newSingleThreadExecutor();
+            Future<Integer> future = executorService.submit(new Callable<Integer>() {
+                @Override
+                public Integer call() throws Exception {
+                    // input信息需要在error之前执行，否input信息会阻塞-如果异步执行不存在此问题
+                    ScriptOutput.start(pos.getInputStream());
+                    ScriptOutput.start(pos.getErrorStream());
+                    return pos.waitFor();
+                }
+            });
+            if (timeout == null || timeout < 1) {
+                pos.destroyForcibly();
+                future.cancel(true);//结束异步监听
                 return 0;
             }
+            for (int i = 0; i > -1; i++) {
+                TimeUnit.SECONDS.sleep(1);
+                if (future.isDone()) {
+                    return future.get();
+                }
+                if (i >= timeout) {
+                    pos.destroyForcibly();
+                    future.cancel(true);//结束异步监听
+                    return 0;
+                }
+            }
             return 1;
         } catch (Exception e) {
             return 1;
         } finally {
-        }
-    }
-
-    public void printLog(InputStream is) {
-        InputStreamReader ir = null;
-        BufferedReader input = null;
-        try {
-            ir = new InputStreamReader(is);
-            input = new BufferedReader(ir);
-            String ln = "";
-            while ((ln = input.readLine()) != null) {
-                System.out.println(ln);
+            if (executorService != null) {
+                executorService.shutdown();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                is.close();
-            } catch (Exception e2) {
-                e2.printStackTrace();
-            }
-            try {
-                if (input != null) {
-                    input.close();
-                }
-            } catch (Exception e2) {
-                e2.printStackTrace();
-            }
-            try {
-                if (ir != null) {
-                    ir.close();
-                }
-            } catch (Exception e2) {
-                e2.printStackTrace();
-            }
-
         }
     }
 }
