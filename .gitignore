@@ -8,3 +8,6 @@
 /dataSources.local.xml
 target/*
 .factorypath
+.classpath
+.settings/*
+.project
