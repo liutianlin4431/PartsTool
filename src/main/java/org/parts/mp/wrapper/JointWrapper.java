@@ -6,7 +6,6 @@ import org.parts.mp.wrapper.auxiliary.AuxiliaryWrapper;
 import org.parts.mp.wrapper.auxiliary.FFunction;
 
 import cn.hutool.core.convert.Convert;
-import cn.hutool.core.lang.Console;
 import cn.hutool.json.JSONObject;
 
 public class JointWrapper<T> implements AuxiliaryWrapper<T> {

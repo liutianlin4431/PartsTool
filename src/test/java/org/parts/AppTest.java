@@ -4,8 +4,6 @@ import org.junit.Test;
 import org.parts.mp.wrapper.JointWrapper;
 import org.parts.response.ReturnData;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-
 import cn.hutool.core.lang.Console;
 
 @SuppressWarnings({ "deprecation", "rawtypes" })
