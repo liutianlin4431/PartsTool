@@ -9,7 +9,7 @@ package org.parts.psd.card;
 @SuppressWarnings("deprecation")
 public class CardAux {
 	/**
-	 * 卡中添加浮点数 <br/>
+	 * 在卡的范围内添加浮点数 <br/>
 	 * 起始位置与结束位置与卡的说明手册一致，数值为“正整数”。<br/>
 	 * 
 	 * @param cardB  卡的字节数组
@@ -25,7 +25,7 @@ public class CardAux {
 	}
 
 	/**
-	 * 卡中添加数据 <br/>
+	 * 在卡的范围内添加数据 <br/>
 	 * 起始位置与结束位置与卡的说明手册一致，数值为“正整数”。<br/>
 	 * 
 	 * @param cardB  卡的字节数组
@@ -36,6 +36,20 @@ public class CardAux {
 	public static void addVal(byte[] cardB, Object source, int goalS, int goalE) {
 		if (goalE > goalS && goalS > 0 && goalE > 0) {
 			CardUtils.addByte(cardB, source, goalS - 1, goalE - 1);
+		}
+	}
+
+	/**
+	 * 在卡的固定位添加数据 <br/>
+	 * 存放位置与卡的说明手册一致，数值为“正整数”。<br/>
+	 * 
+	 * @param cardB  卡的字节数组
+	 * @param source 添加的浮点数
+	 * @param goal   存放的位置
+	 */
+	public static void addVal(byte[] cardB, Object source, int goal) {
+		if (goal > 0) {
+			CardUtils.addByte(cardB, source, goal - 1, goal - 1);
 		}
 	}
 }
