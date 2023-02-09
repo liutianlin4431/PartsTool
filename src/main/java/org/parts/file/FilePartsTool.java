@@ -63,20 +63,12 @@ public class FilePartsTool {
 	 */
 	public static byte[] fileToByte(File file) {
 		byte[] bytes = null;
-		FileInputStream fis = null;
-		try {
-			fis = new FileInputStream(file);
+		try (FileInputStream fis = new FileInputStream(file)) {
 			bytes = new byte[(int) file.length()];
 			fis.read(bytes);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
-		} finally {
-			try {
-				fis.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 		return bytes;
 	}
