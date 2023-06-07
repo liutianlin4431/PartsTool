@@ -1,12 +1,11 @@
 package org.parts.command;
 
-import org.apache.http.client.config.AuthSchemes;
-import org.parts.file.FileEnh;
-
 import cn.hutool.core.lang.Console;
 import io.cloudsoft.winrm4j.client.WinRmClientContext;
 import io.cloudsoft.winrm4j.winrm.WinRmTool;
 import io.cloudsoft.winrm4j.winrm.WinRmToolResponse;
+import org.apache.http.client.config.AuthSchemes;
+import org.parts.file.FileEnh;
 
 /**
  * 远程win执行；默认端口5985

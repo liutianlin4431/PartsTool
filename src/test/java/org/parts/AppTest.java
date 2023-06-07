@@ -1,10 +1,9 @@
 package org.parts;
 
+import cn.hutool.core.lang.Console;
 import org.junit.Test;
 import org.parts.mp.wrapper.JointWrapper;
 import org.parts.response.ReturnData;
-
-import cn.hutool.core.lang.Console;
 
 @SuppressWarnings({ "deprecation", "rawtypes" })
 public class AppTest {

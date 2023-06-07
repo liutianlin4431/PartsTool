@@ -1,14 +1,16 @@
 package org.parts.response;
 
+import cn.hutool.core.lang.Console;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class CommonResult<T> {
     private String code;
     private Boolean success;
@@ -16,6 +18,11 @@ public class CommonResult<T> {
     private String msg;
     private T result;
     private Long stamp;
+
+    public void setErrorMsg(Exception errorMsg) {
+        Console.error(errorMsg);
+        this.errorMsg = errorMsg;
+    }
 
     /**
      * 成功无数据信息
@@ -53,7 +60,6 @@ public class CommonResult<T> {
      * @return CommonResult<T>
      */
     public static <T> CommonResult<T> error() {
-
         CommonResult<T> cr = new CommonResult<T>();
         cr.setSuccess(false);
         cr.setMsg("失败");

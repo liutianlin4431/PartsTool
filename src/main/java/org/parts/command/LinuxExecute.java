@@ -1,21 +1,10 @@
 package org.parts.command;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-
+import cn.hutool.core.lang.Console;
+import com.jcraft.jsch.*;
 import org.parts.file.FileEnh;
 
-import com.jcraft.jsch.Channel;
-import com.jcraft.jsch.ChannelExec;
-import com.jcraft.jsch.ChannelSftp;
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.Session;
-import com.jcraft.jsch.SftpException;
-
-import cn.hutool.core.lang.Console;
+import java.io.*;
 
 /**
  * 远程linux工具类<br>
