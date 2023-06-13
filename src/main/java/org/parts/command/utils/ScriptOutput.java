@@ -1,11 +1,11 @@
 package org.parts.command.utils;
 
-import cn.hutool.core.lang.Console;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 脚本运行输出
@@ -16,6 +16,7 @@ import java.io.InputStreamReader;
 public class ScriptOutput extends Thread {
     private InputStream is;
     private String encoded = "GBK";
+    private StringBuffer consoleInfo = new StringBuffer();
 
     private ScriptOutput(InputStream is) {
         this.is = is;
@@ -26,16 +27,16 @@ public class ScriptOutput extends Thread {
         this.encoded = encoded;
     }
 
-    public static Thread start(InputStream is) {
-        Thread thread = new ScriptOutput(is);
-        thread.start();
-        return thread;
+    public static ScriptOutput start(InputStream is) {
+        ScriptOutput so = new ScriptOutput(is);
+        so.start();
+        return so;
     }
 
-    public static Thread start(InputStream is, String encoded) {
-        Thread thread = new ScriptOutput(is, encoded);
-        thread.start();
-        return thread;
+    public static ScriptOutput start(InputStream is, String encoded) {
+        ScriptOutput so = new ScriptOutput(is, encoded);
+        so.start();
+        return so;
     }
 
     /**
@@ -54,16 +55,36 @@ public class ScriptOutput extends Thread {
     /**
      * 获取控制台信息
      *
-     * @param is
      * @return
      */
-    public static String getConsoleInfo(InputStream is) {
-        return new ScriptOutput(is).readInputStream();
+    public String getConsoleInfo() {
+        int max = 60480000;
+        int i = 0;
+        while (this.isAlive()) {
+            try {
+                Thread.sleep(10);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            i++;
+            if (i > max) break;
+        }
+        return this.consoleInfo.toString();
+    }
+
+    /**
+     * 获取控制台信息列表
+     *
+     * @return
+     */
+    public List<String> getConsoleInfoList() {
+        String ci = this.getConsoleInfo();
+        return Arrays.asList(ci.split("\n"));
     }
 
     @Override
     public void run() {
-        Console.log(this.readInputStream());
+        this.readInputStream();
     }
 
     /**
@@ -73,15 +94,13 @@ public class ScriptOutput extends Thread {
      */
     public String readInputStream() {
         try {
-            StringBuffer sb = new StringBuffer();
             BufferedInputStream bis = new BufferedInputStream(is);
             BufferedReader br = new BufferedReader(new InputStreamReader(bis, encoded));
             String line;
             while ((line = br.readLine()) != null) {
-                if (!line.trim().equals("")) sb.append(line + "\n");
-                System.out.println(line);
+                if (!line.trim().equals("")) consoleInfo.append(line + "\n");
             }
-            return sb.toString();
+            return consoleInfo.toString();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
