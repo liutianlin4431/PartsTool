@@ -1,7 +1,7 @@
 package org.parts.file;
 
 /**
- * @description: 文本构建器：非线程安全；提要提供换行文本拼接功能
+ * @description: 文本构建器：非线程安全；提供换行文本拼接功能
  * @date: 2020/12/15 15:12
  * @auther: 刘天林
  * @version: 1.0
@@ -44,5 +44,4 @@ public class TextBuilder {
     public String toString() {
         return sb.toString();
     }
-
 }
