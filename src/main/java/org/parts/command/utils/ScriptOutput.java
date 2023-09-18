@@ -4,8 +4,9 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 脚本运行输出
@@ -14,9 +15,11 @@ import java.util.List;
  * @create 2022/6/6
  */
 public class ScriptOutput extends Thread {
+    private Integer ln = 0;
+    private boolean end = false;
     private InputStream is;
     private String encoded = "GBK";
-    private StringBuffer consoleInfo = new StringBuffer();
+    private List<String> consoleInfo = new ArrayList<>();
 
     private ScriptOutput(InputStream is) {
         this.is = is;
@@ -58,18 +61,7 @@ public class ScriptOutput extends Thread {
      * @return
      */
     public String getConsoleInfo() {
-        int max = 60480000;
-        int i = 0;
-        while (this.isAlive()) {
-            try {
-                Thread.sleep(10);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            i++;
-            if (i > max) break;
-        }
-        return this.consoleInfo.toString();
+        return String.join("\n", this.getConsoleInfoList());
     }
 
     /**
@@ -78,38 +70,82 @@ public class ScriptOutput extends Thread {
      * @return
      */
     public List<String> getConsoleInfoList() {
-        String ci = this.getConsoleInfo();
-        return Arrays.asList(ci.split("\n"));
+        while (!end) {
+            try {
+                Thread.sleep(10);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return this.consoleInfo;
     }
 
-    @Override
-    public void run() {
-        this.readInputStream();
+    /**
+     * 是否继续
+     *
+     * @return
+     */
+    public boolean next() {
+        if (ln < consoleInfo.size()) {
+            return true;
+        } else if (ln >= consoleInfo.size()) {
+            while (true) {
+                try {
+                    if (ln < consoleInfo.size()) {
+                        return true;
+                    } else if (ln >= consoleInfo.size() && end) {
+                        return false;
+                    }
+                    TimeUnit.SECONDS.sleep(5);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 读取最新一行
+     *
+     * @return
+     */
+    public String readLine() {
+        ln++;
+        return this.consoleInfo.get(ln - 1);
     }
 
     /**
      * 读取输入流内容
-     *
-     * @return
      */
-    public String readInputStream() {
+    @Override
+    public void run() {
         try {
+            end = false;
             BufferedInputStream bis = new BufferedInputStream(is);
             BufferedReader br = new BufferedReader(new InputStreamReader(bis, encoded));
             String line;
             while ((line = br.readLine()) != null) {
-                if (!line.trim().equals("")) consoleInfo.append(line + "\n");
+                if (!line.trim().equals("")) if (line.contains("\n")) {
+                    String lineArray[] = line.split("\n");
+                    for (String one : lineArray) {
+                        one = one.trim();
+                        if (!one.equals("")) {
+                            consoleInfo.add(one);
+                        }
+                    }
+                } else consoleInfo.add(line);
             }
-            return consoleInfo.toString();
+            end = true;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            end = true;
             try {
                 is.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        return "";
     }
 }
