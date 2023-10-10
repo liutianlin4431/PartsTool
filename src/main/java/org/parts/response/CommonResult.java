@@ -346,7 +346,7 @@ public class CommonResult<T> {
         if (this.success) {
             rd.setSuccess(1);
         } else {
-            rd.setCode(0);
+            rd.setSuccess(0);
         }
         rd.setData(this.result);
         return rd;

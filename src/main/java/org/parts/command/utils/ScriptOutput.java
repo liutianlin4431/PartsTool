@@ -123,7 +123,7 @@ public class ScriptOutput extends Thread {
         try {
             end = false;
             BufferedInputStream bis = new BufferedInputStream(is);
-            BufferedReader br = new BufferedReader(new InputStreamReader(bis, encoded));
+            BufferedReader br = new BufferedReader(new InputStreamReader(is, encoded));
             String line;
             while ((line = br.readLine()) != null) {
                 if (!line.trim().equals("")) if (line.contains("\n")) {
