@@ -96,7 +96,7 @@ public class ScriptOutput extends Thread {
                     } else if (ln >= consoleInfo.size() && end) {
                         return false;
                     }
-                    TimeUnit.SECONDS.sleep(5);
+                    TimeUnit.MILLISECONDS.sleep(10);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
